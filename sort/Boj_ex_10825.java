@@ -1,56 +1,53 @@
-package bruteForce;
+package sort;
 
 import java.io.*;
+import java.util.Arrays;
 import java.util.StringTokenizer;
 
-//N퀸
-public class Boj_9663 {
+public class Boj_ex_10825 {
     static StringBuilder sb = new StringBuilder();
     static FastReader scan = new FastReader();
 
-    static void input (){
-        N = scan.nextInt();
-        col = new int[N + 1];
-    }
+    static class Elem implements Comparable<Elem> {
+        public String name;
+        public int korean, english, math;
 
-    static int N, ans;
-    static int[] col;
-
-    static boolean attackable(int r1, int c1, int r2, int c2) {
-        if (c1 == c2) return true;
-        if (r1 - r2 == Math.abs(c1 - c2)) return true;
-        return false;
-    }
-
-    static void rec_func(int row){
-        if (row == N + 1){
-            ans++;
-        } else {
-            for(int c = 1; c <= N; c++){
-                boolean possible = true;
-                //valid check (row, c)
-                for (int i=1; i <= row - 1; i++){
-                    if (attackable(row, c, i, col[i])){
-                        possible = false;
-                        break;
-                    }
-                }
-                if (possible) {
-                    col[row] = c;
-                    rec_func(row + 1);
-                    col[row] = 0;
-                }
-            }
+        @Override
+        public int compareTo(Elem other){
+            if (korean != other.korean) return other.korean - korean;
+            if (english != other.english) return english - this.english;
+            if (math != other.math) return other.math - math;
+            return name.compareTo(other.name);
         }
+    }
+    static int N;
+    static Elem[] a;
+
+    static void input(){
+        N = scan.nextInt();
+        for(int i = 0; i < N; i++){
+            a[i] = new Elem();
+            a[i].name = scan.next();
+            a[i].korean = scan.nextInt();
+            a[i].english =scan.nextInt();
+            a[i].math =scan.nextInt();
+        }
+    }
+
+    static void pro(){
+        Arrays.sort(a);
+        for(int i = 0; i < N; i++){
+            sb.append(a[i].name).append('\n');
+        }
+        System.out.println(sb.toString());
     }
 
     public static void main(String[] args) {
         input();
-        rec_func(1);
-        System.out.println(ans);
+        pro();
     }
 
-    static class FastReader{
+    static class FastReader {
         BufferedReader br;
         StringTokenizer st;
 

@@ -1,56 +1,51 @@
-package bruteForce;
+package sort;
 
 import java.io.*;
+import java.util.Arrays;
 import java.util.StringTokenizer;
 
-//N퀸
-public class Boj_9663 {
+//카드
+public class Boj_11652_my {
     static StringBuilder sb = new StringBuilder();
     static FastReader scan = new FastReader();
 
-    static void input (){
+    static int N;
+    static long[] a;
+
+    static void input(){
         N = scan.nextInt();
-        col = new int[N + 1];
+        a = new long[N + 1];
+        for(int i = 1; i < N+1; i++){
+            a[i] = scan.nextLong();
+        }
     }
 
-    static int N, ans;
-    static int[] col;
+    static void pro(){
+        Arrays.sort(a, 1, N + 1);  // Sort
+        long mode = a[1];
+        int modeCnt = 1, curCnt = 1;  // mode: 최빈값, modeCnt: 최빈값의 등장 횟수, curCnt: 현재 값(a[1])의 등장 횟수
 
-    static boolean attackable(int r1, int c1, int r2, int c2) {
-        if (c1 == c2) return true;
-        if (r1 - r2 == Math.abs(c1 - c2)) return true;
-        return false;
-    }
+        for (int i = 2; i <= N; i++) {
+            if (a[i] == a[i - 1]) {  // a[i] 라는 숫자가 계속 등장하고 있다.
+                curCnt++;
+            } else {
+                curCnt = 1;  // a[i] 라는 숫자가 새롭게 등장했다.
+            }
 
-    static void rec_func(int row){
-        if (row == N + 1){
-            ans++;
-        } else {
-            for(int c = 1; c <= N; c++){
-                boolean possible = true;
-                //valid check (row, c)
-                for (int i=1; i <= row - 1; i++){
-                    if (attackable(row, c, i, col[i])){
-                        possible = false;
-                        break;
-                    }
-                }
-                if (possible) {
-                    col[row] = c;
-                    rec_func(row + 1);
-                    col[row] = 0;
-                }
+            if (curCnt > modeCnt) {
+                modeCnt = curCnt;
+                mode = a[i];
             }
         }
+        System.out.println(mode);
     }
 
     public static void main(String[] args) {
         input();
-        rec_func(1);
-        System.out.println(ans);
+        pro();
     }
 
-    static class FastReader{
+    static class FastReader {
         BufferedReader br;
         StringTokenizer st;
 

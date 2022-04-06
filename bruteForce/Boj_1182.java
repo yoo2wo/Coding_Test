@@ -3,50 +3,42 @@ package bruteForce;
 import java.io.*;
 import java.util.StringTokenizer;
 
-//N퀸
-public class Boj_9663 {
+//부분 수열의 합
+public class Boj_1182 {
     static StringBuilder sb = new StringBuilder();
     static FastReader scan = new FastReader();
 
-    static void input (){
+    static void input(){
         N = scan.nextInt();
-        col = new int[N + 1];
+        S = scan.nextInt();
+        nums = new int[N+1];
+        for(int i = 1; i <= N; i++)
+            nums[i] = scan.nextInt();
     }
 
-    static int N, ans;
-    static int[] col;
+    static int N, S, ans;
+    static int[] nums;
 
-    static boolean attackable(int r1, int c1, int r2, int c2) {
-        if (c1 == c2) return true;
-        if (r1 - r2 == Math.abs(c1 - c2)) return true;
-        return false;
-    }
+    static void rec_func(int k, int value){
+        if (k == N +1){
+            if (value == S) ans++;
+        }else {
+            //포함 시킨다.
+            rec_func(k + 1, value + nums[k]);
+            //포한 시키지 않는다.
+            rec_func(k + 1, value);
 
-    static void rec_func(int row){
-        if (row == N + 1){
-            ans++;
-        } else {
-            for(int c = 1; c <= N; c++){
-                boolean possible = true;
-                //valid check (row, c)
-                for (int i=1; i <= row - 1; i++){
-                    if (attackable(row, c, i, col[i])){
-                        possible = false;
-                        break;
-                    }
-                }
-                if (possible) {
-                    col[row] = c;
-                    rec_func(row + 1);
-                    col[row] = 0;
-                }
-            }
         }
     }
 
     public static void main(String[] args) {
         input();
-        rec_func(1);
+
+        rec_func(1, 0);
+        //진 부분 집합인지 확인해야한다.
+        if (S==0){
+            ans--;
+        }
         System.out.println(ans);
     }
 
